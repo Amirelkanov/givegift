@@ -8,21 +8,25 @@ import { NotFound } from "../../pages/Error/NotFound";
 export const AppRouter = () => {
     const { session, loading } = useSupabase();
 
-    return (
-        loading
-            ? <PageLoader />
-            : (session ?
-                <Routes>
-                    {privateRoutes.map(route =>
-                        <Route
-                            key={route.path}
-                            path={route.path}
-                            element={<route.component />}
-                        />
-                    )}
-                    <Route path="*" element={<NotFound />} />
-                </Routes>
-                : <SupabaseAuth />
-            )
-    );
+    let pageContent;
+    if (loading) {
+        pageContent = <PageLoader />;
+    } else if (session) {
+        pageContent = (
+            <Routes>
+                {privateRoutes.map(route => (
+                    <Route
+                        key={route.path}
+                        path={route.path}
+                        element={<route.component />}
+                    />
+                ))}
+                <Route path="*" element={<NotFound />} />
+            </Routes>
+        );
+    } else {
+        pageContent = <SupabaseAuth />;
+    }
+
+    return pageContent;
 };

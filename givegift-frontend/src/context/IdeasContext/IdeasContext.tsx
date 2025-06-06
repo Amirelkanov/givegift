@@ -5,6 +5,7 @@ import React, {
   type Dispatch,
   type SetStateAction,
   useContext,
+  useMemo,
 } from "react";
 import { useFetching } from "../../hooks/useFetching";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
@@ -39,14 +40,21 @@ export const IdeasContextProvider: React.FC<{ children: ReactNode }> = ({
     }
   );
 
-  const value: IdeasContextType = {
+  const value = useMemo(() => ({
     productIdeas,
     generateIdeas,
     isIdeasLoading,
     ideaError,
     isAdult,
     setIsAdult,
-  };
+  }), [
+    productIdeas,
+    generateIdeas,
+    isIdeasLoading,
+    ideaError,
+    isAdult,
+    setIsAdult
+  ]);
 
   return (
     <IdeasContext.Provider value={value}>

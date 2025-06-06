@@ -64,7 +64,7 @@ export const FavouritesContextProvider: React.FC<{ children: ReactNode }> = ({
         }
     }, [userID])
 
-    const value: FavouritesContextType = {
+    const value = useMemo(() => ({
         addToFavourites,
         removeFromFavourites,
         editFavouritesTag,
@@ -73,7 +73,16 @@ export const FavouritesContextProvider: React.FC<{ children: ReactNode }> = ({
         userFavouritesError,
         allUserFavourites,
         allUserTags
-    }
+    }), [
+        addToFavourites,
+        removeFromFavourites,
+        editFavouritesTag,
+        fetchUserFavourites,
+        isUserFavouritesLoading,
+        userFavouritesError,
+        allUserFavourites,
+        allUserTags
+    ])
 
     return (
         <FavouritesContext.Provider value={value}>

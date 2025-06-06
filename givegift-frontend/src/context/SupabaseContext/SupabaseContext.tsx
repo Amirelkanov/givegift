@@ -9,6 +9,7 @@ import React, {
     createContext,
     useContext,
     useEffect,
+    useMemo,
     useState,
     type ReactNode,
 } from "react";
@@ -60,8 +61,12 @@ export const SupabaseContextProvider: React.FC<{
         };
     }, []);
 
+    const value = useMemo(() => ({
+        supabase, session, loading, error
+    }), [supabase, session, loading, error]);
+
     return (
-        <SupabaseContext.Provider value={{ supabase, session, loading, error }}>
+        <SupabaseContext.Provider value={value}>
             {children}
         </SupabaseContext.Provider>
     );

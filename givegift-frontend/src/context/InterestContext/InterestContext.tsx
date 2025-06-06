@@ -36,12 +36,17 @@ export const InterestContextProvider: React.FC<{
     }
   );
 
-  const value: InterestContextType = {
+  const value = React.useMemo(() => ({
     allInterests,
     fetchInterests,
     userInterests,
     setUserInterests,
-  };
+  }), [
+    allInterests,
+    fetchInterests,
+    userInterests,
+    setUserInterests
+  ]);
 
   return (
     <InterestContext.Provider value={value}>

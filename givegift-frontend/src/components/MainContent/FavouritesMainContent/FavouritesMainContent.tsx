@@ -14,14 +14,15 @@ export const FavouritesMainContent: React.FC<FavouritesMainContentProps> = ({
     userFavouritesError,
     userFavourites,
 }) => {
+    let pageContent;
 
-    return (
-        isUserFavouritesLoading ? (
-            <ProductsLoader loadingText={"Ищем избранное..."} />
-        ) : userFavouritesError ? (
-            <ResultsError errorMsg={userFavouritesError} />
-        ) : (
-            <ProductsList products={userFavourites} />
-        )
-    );
+    if (isUserFavouritesLoading) {
+        pageContent = <ProductsLoader loadingText={"Ищем избранное..."} />;
+    } else if (userFavouritesError) {
+        pageContent = <ResultsError errorMsg={userFavouritesError} />;
+    } else {
+        pageContent = <ProductsList products={userFavourites} />;
+    }
+
+    return pageContent;
 };

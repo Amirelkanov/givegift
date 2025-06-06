@@ -6,16 +6,15 @@ import { ProductsLoader } from "../../UI/Loader/ProductsLoader/ProductsLoader";
 
 export const IdeasMainContent = () => {
     const { productIdeas, isIdeasLoading, ideaError } = useIdeas();
+    let pageContent;
 
-    return (
-        <>
-            {isIdeasLoading ? (
-                <ProductsLoader loadingText={"Придумываем идеи..."} />
-            ) : ideaError ? (
-                <ResultsError errorMsg={ideaError} />
-            ) : (
-                <ProductsList products={productIdeas} />
-            )}
-        </>
-    );
+    if (isIdeasLoading) {
+        pageContent = <ProductsLoader loadingText={"Придумываем идеи..."} />;
+    } else if (ideaError) {
+        pageContent = <ResultsError errorMsg={ideaError} />;
+    } else {
+        pageContent = <ProductsList products={productIdeas} />;
+    }
+
+    return pageContent;
 }
