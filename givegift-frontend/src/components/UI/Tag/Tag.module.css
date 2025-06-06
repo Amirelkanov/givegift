@@ -19,7 +19,6 @@
 
 .xBtn {
   display: grid;
-  padding: 0;
   border: none;
   background: transparent;
   cursor: pointer;
