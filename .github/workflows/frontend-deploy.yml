@@ -95,7 +95,7 @@ jobs:
         uses: yc-actions/yc-cr-login@v3
         with:
           yc-sa-json-credentials: ${{ secrets.YC_JSON_CREDS }}
-          
+
       - name: Build, tag, and push image to Yandex Cloud Container Registry
         env:
           CR_REGISTRY: ${{ secrets.YC_REGISTRY }}
@@ -107,9 +107,10 @@ jobs:
           BACKEND_URL: ${{ secrets.BACKEND_URL }}
         working-directory: ./givegift-frontend
         run: |
-          docker build -t cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:$IMAGE_TAG givegift-frontend \ 
+          docker build -t cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:$IMAGE_TAG . \ 
                 --build-arg SUPABASE_URL=$SUPABASE_URL \
                 --build-arg SUPABASE_PUBLIC_KEY=$SUPABASE_PUBLIC_KEY \
                 --build-arg BACKEND_URL=$BACKEND_URL
+          docker tag cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:$IMAGE_TAG cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:latest
           docker push cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:$IMAGE_TAG
           docker push cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:latest
