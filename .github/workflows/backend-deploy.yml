@@ -1,15 +1,10 @@
 name: CI/CD Backend Pipeline for GiveGift
 
-# on: 
-#   workflow_run:
-#     workflows: ["Project analysis by SonarQube"]
-#     types:
-#       - completed
-
-on:
-    push:
-      branches:
-        - main
+on: 
+  workflow_run:
+    workflows: ["Project analysis by SonarQube"]
+    types:
+      - completed
 
 jobs:
   build:

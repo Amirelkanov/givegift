@@ -1,116 +1,116 @@
-# name: CI/CD Frontend Pipeline for GiveGift
+name: CI/CD Frontend Pipeline for GiveGift
 
-# on: 
-#   workflow_run:
-#     workflows: ["Project analysis by SonarQube"]
-#     types:
-#       - completed
+on: 
+  workflow_run:
+    workflows: ["Project analysis by SonarQube"]
+    types:
+      - completed
 
-# jobs:
-#   build:
-#     if: ${{ github.event.workflow_run.conclusion == 'success' }}
-#     runs-on: ubuntu-latest
-#     defaults:
-#       run:
-#         working-directory: ./givegift-frontend
-#     steps:
-#       - name: Checkout repo
-#         uses: actions/checkout@v3
+jobs:
+  build:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./givegift-frontend
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
-#       - name: Setup Node.js
-#         uses: actions/setup-node@v3
-#         with:
-#           node-version: 22
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
 
-#       - name: Cache NPM dependencies
-#         uses: actions/cache@v3
-#         with:
-#           path: ~/.npm
-#           key: ${{ runner.os }}-node-${{ hashFiles('givegift-frontend/package-lock.json') }}
-#           restore-keys: |
-#             ${{ runner.os }}-node-
+      - name: Cache NPM dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('givegift-frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
-#       - name: Install dependencies
-#         run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
-#       - name: Build production bundle
-#         run: npm run build
+      - name: Build production bundle
+        run: npm run build
 
-#       - name: Upload frontend build
-#         uses: actions/upload-artifact@v4
-#         with:
-#           name: frontend-build
-#           path: givegift-frontend/dist
+      - name: Upload frontend build
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-build
+          path: givegift-frontend/dist
 
-#   test:
-#     if: ${{ github.event.workflow_run.conclusion == 'success' }}
-#     needs: build
-#     runs-on: ubuntu-latest
-#     defaults:
-#       run:
-#         working-directory: ./givegift-frontend
-#     steps:
-#       - name: Checkout repo
-#         uses: actions/checkout@v3
+  test:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    needs: build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./givegift-frontend
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
-#       - name: Setup Node.js
-#         uses: actions/setup-node@v3
-#         with:
-#           node-version: 22
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
 
-#       - name: Cache NPM dependencies
-#         uses: actions/cache@v3
-#         with:
-#           path: ~/.npm
-#           key: ${{ runner.os }}-node-${{ hashFiles('givegift-frontend/package-lock.json') }}
-#           restore-keys: |
-#             ${{ runner.os }}-node-
+      - name: Cache NPM dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('givegift-frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
-#       - name: Install dependencies
-#         run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
-#       - name: Run tests with coverage
-#         run: npm run coverage
+      - name: Run tests with coverage
+        run: npm run coverage
 
-#       - name: Upload frontend coverage
-#         uses: actions/upload-artifact@v4
-#         with:
-#           name: frontend-coverage
-#           path: givegift-frontend/coverage
+      - name: Upload frontend coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-coverage
+          path: givegift-frontend/coverage
 
-#   push:
-#     if: ${{ github.event.workflow_run.conclusion == 'success' }}
-#     needs: [build, test]
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout repo
-#         uses: actions/checkout@v3
+  push:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    needs: [build, test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
-#       - name: Setup Docker
-#         working-directory: ./.github/workflows
-#         run: bash ./setup-docker.sh
+      - name: Setup Docker
+        working-directory: ./.github/workflows
+        run: bash ./setup-docker.sh
         
-#       - name: Login to Yandex Cloud Container Registry
-#         id: login-cr
-#         uses: yc-actions/yc-cr-login@v3
-#         with:
-#           yc-sa-json-credentials: ${{ secrets.YC_JSON_CREDS }}
+      - name: Login to Yandex Cloud Container Registry
+        id: login-cr
+        uses: yc-actions/yc-cr-login@v3
+        with:
+          yc-sa-json-credentials: ${{ secrets.YC_JSON_CREDS }}
 
-#       - name: Build, tag, and push image to Yandex Cloud Container Registry
-#         env:
-#           CR_REGISTRY: ${{ secrets.YC_REGISTRY }}
-#           CR_REPOSITORY: givegift-frontend
-#           IMAGE_TAG: ${{ github.sha }}
+      - name: Build, tag, and push image to Yandex Cloud Container Registry
+        env:
+          CR_REGISTRY: ${{ secrets.YC_REGISTRY }}
+          CR_REPOSITORY: givegift-frontend
+          IMAGE_TAG: ${{ github.sha }}
           
-#           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-#           SUPABASE_PUBLIC_KEY: ${{ secrets.SUPABASE_PUBLIC_KEY }}
-#           BACKEND_URL: ${{ secrets.BACKEND_URL }}
-#         working-directory: ./givegift-frontend
-#         run: |
-#           docker build -t cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:$IMAGE_TAG . \ 
-#                 --build-arg SUPABASE_URL=$SUPABASE_URL \
-#                 --build-arg SUPABASE_PUBLIC_KEY=$SUPABASE_PUBLIC_KEY \
-#                 --build-arg BACKEND_URL=$BACKEND_URL
-#           docker tag cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:$IMAGE_TAG cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:latest
-#           docker push cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:$IMAGE_TAG
-#           docker push cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:latest
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_PUBLIC_KEY: ${{ secrets.SUPABASE_PUBLIC_KEY }}
+          BACKEND_URL: ${{ secrets.BACKEND_URL }}
+        working-directory: ./givegift-frontend
+        run: |
+          docker build -t cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:$IMAGE_TAG . \ 
+                --build-arg SUPABASE_URL=$SUPABASE_URL \
+                --build-arg SUPABASE_PUBLIC_KEY=$SUPABASE_PUBLIC_KEY \
+                --build-arg BACKEND_URL=$BACKEND_URL
+          docker tag cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:$IMAGE_TAG cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:latest
+          docker push cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:$IMAGE_TAG
+          docker push cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:latest
