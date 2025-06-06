@@ -19,9 +19,14 @@
 
 .xBtn {
   display: grid;
-  justify-self: end;
-  margin-top: 1px;
+  padding: 0;
+  border: none;
+  background: transparent;
   cursor: pointer;
-  height: 8px;
+  padding: 0.25em;
+}
+
+.xBtn img {
   width: 8px;
+  height: 8px;
 }

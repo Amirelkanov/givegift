@@ -16,12 +16,14 @@ export const Tag: React.FC<TagProps> = ({ tagName, remove, isRemovable }) => {
       <div className={styles.tag_content}>
         <span>{tagName}</span>
         {isRemovable && (
-          <img
+          <button
+            type="button"
             className={styles.xBtn}
-            src={x_btn}
             onClick={() => remove(tagName)}
-            alt="x"
-          />
+            aria-label={`Remove ${tagName}`}
+          >
+            <img src={x_btn} alt="" />
+          </button>
         )}
       </div>
     </div>
