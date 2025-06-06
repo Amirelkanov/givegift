@@ -1,6 +1,8 @@
 name: CI/CD Backend Pipeline for GiveGift
 
-on: [push, pull_request]
+on: 
+  workflow_run:
+    workflows: ["SonarQube Analyze Project"]
 
 jobs:
   build:
