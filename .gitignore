@@ -1,4 +1,5 @@
 key.json
+ga-sa.json
 
 yandex-cloud-tf/*.tfvars
 yandex-cloud-tf/.terraform*

@@ -77,3 +77,31 @@ jobs:
         with:
           name: frontend-coverage
           path: givegift-frontend/coverage
+
+  push:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    needs: [build, test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to Yandex Cloud Container Registry
+        id: login-cr
+        uses: yc-actions/yc-cr-login@v3
+        with:
+          yc-sa-json-credentials: ${{ secrets.YC_JSON_CREDS }}
+
+      - name: Build, tag, and push image to Yandex Cloud Container Registry
+        env:
+          CR_REGISTRY: ${{ secrets.YC_REGISTRY }}
+          CR_REPOSITORY: givegift-frontend
+          IMAGE_TAG: ${{ github.sha }}
+          
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_PUBLIC_KEY: ${{ secrets.SUPABASE_PUBLIC_KEY }}
+          BACKEND_URL: ${{ secrets.BACKEND_URL }}
+        run: |
+          docker build -t cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:$IMAGE_TAG . \ 
+                --build-arg SUPABASE_URL=$SUPABASE_URL \
+                --build-arg SUPABASE_PUBLIC_KEY=$SUPABASE_PUBLIC_KEY \
+                --build-arg BACKEND_URL=$BACKEND_URL
+          docker push cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:$IMAGE_TAG
+          docker push cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:latest
