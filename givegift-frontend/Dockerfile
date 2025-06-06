@@ -14,7 +14,7 @@ ENV VITE_BACKEND_URL=$BACKEND_URL
 
 # Copy package files and install
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm ci --ignore-scripts
 
 # Copy app files
 COPY . .

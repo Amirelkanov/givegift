@@ -6,7 +6,7 @@ WORKDIR /usr/src/app
 COPY package.json package-lock.json ./
 
 # Install project dependencies (ignore development dependencies, ex. nodemon)
-RUN npm install --production
+RUN npm install --production --ignore-scripts
 
 # Copy app files
 COPY . .
