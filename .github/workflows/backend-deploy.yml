@@ -76,21 +76,24 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
+
       - name: Setup Docker
-        run: bash ./.github/workflows/setup-docker.sh
+        working-directory: ./.github/workflows
+        run: bash ./setup-docker.sh
+
       - name: Login to Yandex Cloud Container Registry
         id: login-cr
         uses: yc-actions/yc-cr-login@v3
         with:
           yc-sa-json-credentials: ${{ secrets.YC_JSON_CREDS }}
-
+          
       - name: Build, tag, and push image to Yandex Cloud Container Registry
         env:
           CR_REGISTRY: ${{ secrets.YC_REGISTRY }}
           CR_REPOSITORY: givegift-backend
           IMAGE_TAG: ${{ github.sha }}
-          
+        working-directory: ./givegift-backend
         run: |
-          docker build -t cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:$IMAGE_TAG givegift-backend/
+          docker build -t cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:$IMAGE_TAG .
           docker push cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:$IMAGE_TAG
           docker push cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:latest
