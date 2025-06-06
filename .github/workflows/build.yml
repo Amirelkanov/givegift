@@ -1,4 +1,4 @@
-name: SonarQube Analyze Project
+name: Project analysis by SonarQube
 
 on:
   push:
