@@ -74,6 +74,8 @@ jobs:
     needs: [build, test]
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
       - name: Setup Docker
         run: bash ./setup-docker.sh
       - name: Login to Yandex Cloud Container Registry
