@@ -8,6 +8,7 @@ on:
       
 jobs:
   build:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -42,6 +43,7 @@ jobs:
           path: givegift-frontend/dist
 
   test:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     needs: build
     runs-on: ubuntu-latest
     defaults:
