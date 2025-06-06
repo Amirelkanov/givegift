@@ -103,7 +103,7 @@ jobs:
           SUPABASE_PUBLIC_KEY: ${{ secrets.SUPABASE_PUBLIC_KEY }}
           BACKEND_URL: ${{ secrets.BACKEND_URL }}
         run: |
-          docker build -t cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:$IMAGE_TAG . \ 
+          docker build -t cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:$IMAGE_TAG givegift-frontend/ \ 
                 --build-arg SUPABASE_URL=$SUPABASE_URL \
                 --build-arg SUPABASE_PUBLIC_KEY=$SUPABASE_PUBLIC_KEY \
                 --build-arg BACKEND_URL=$BACKEND_URL
