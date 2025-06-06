@@ -3,6 +3,19 @@ kind: Application
 metadata:
   name: givegift-argocd-app
   namespace: argocd
+  annotations:
+    # 1) List the images you want to track (with a “latest” constraint)
+    argocd-image-updater.argoproj.io/image-list: |
+      frontend=cr.yandex/crplvdacg3tpu0lg6jj7/givegift-frontend:latest,
+      backend=cr.yandex/crplvdacg3tpu0lg6jj7/givegift-backend:latest
+    # 2) Since “latest” is a mutable tag, use the digest strategy
+    argocd-image-updater.argoproj.io/frontend.update-strategy: digest
+    argocd-image-updater.argoproj.io/backend.update-strategy: digest
+    # 3) Map each alias into your Helm values keys
+    argocd-image-updater.argoproj.io/frontend.helm.image-name: frontend.image.repository
+    argocd-image-updater.argoproj.io/frontend.helm.image-tag: frontend.image.tag
+    argocd-image-updater.argoproj.io/backend.helm.image-name: backend.image.repository
+    argocd-image-updater.argoproj.io/backend.helm.image-tag: backend.image.tag
 spec:
   project: default
   source:

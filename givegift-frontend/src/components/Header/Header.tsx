@@ -21,7 +21,7 @@ export const Header: React.FC = () => {
     return (
         <div className={styles.header}>
             <NavLink className={styles.logo} to="/">
-                ДариДарыv1
+                ДариДарыv2
             </NavLink>
 
             <div className={styles.account_settings}>
