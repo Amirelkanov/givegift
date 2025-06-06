@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/spbsu-2025-vct/givegift-argocd.git
+    repoURL: https://github.com/Amirelkanov/givegift-argocd
     targetRevision: main
     path: givegift/
   destination:
