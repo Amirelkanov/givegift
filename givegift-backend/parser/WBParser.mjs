@@ -39,28 +39,34 @@ function getFirstProductIDAndName(response, adult = false) {
 // Determine basket based on shortID range
 /* c8 ignore start */
 function getBasket(shortID) {
-    let basket;
-    if (shortID <= 143) basket = '01';
-    else if (shortID <= 287) basket = '02';
-    else if (shortID <= 431) basket = '03';
-    else if (shortID <= 719) basket = '04';
-    else if (shortID <= 1007) basket = '05';
-    else if (shortID <= 1061) basket = '06';
-    else if (shortID <= 1115) basket = '07';
-    else if (shortID <= 1169) basket = '08';
-    else if (shortID <= 1313) basket = '09';
-    else if (shortID <= 1601) basket = '10';
-    else if (shortID <= 1655) basket = '11';
-    else if (shortID <= 1919) basket = '12';
-    else if (shortID <= 2045) basket = '13';
-    else if (shortID <= 2189) basket = '14';
-    else if (shortID <= 2405) basket = '15';
-    else if (shortID <= 2621) basket = '16';
-    else if (shortID <= 2837) basket = '17';
-    else if (shortID <= 3053) basket = '18';
-    else basket = '19';
+    const ranges = [
+        { threshold: 143, basket: '01' },
+        { threshold: 287, basket: '02' },
+        { threshold: 431, basket: '03' },
+        { threshold: 719, basket: '04' },
+        { threshold: 1007, basket: '05' },
+        { threshold: 1061, basket: '06' },
+        { threshold: 1115, basket: '07' },
+        { threshold: 1169, basket: '08' },
+        { threshold: 1313, basket: '09' },
+        { threshold: 1601, basket: '10' },
+        { threshold: 1655, basket: '11' },
+        { threshold: 1919, basket: '12' },
+        { threshold: 2045, basket: '13' },
+        { threshold: 2189, basket: '14' },
+        { threshold: 2405, basket: '15' },
+        { threshold: 2621, basket: '16' },
+        { threshold: 2837, basket: '17' },
+        { threshold: 3053, basket: '18' }
+    ];
 
-    return basket
+    for (const range of ranges) {
+        if (shortID <= range.threshold) {
+            return range.basket;
+        }
+    }
+
+    return '19';
 }
 /* c8 ignore end */
 
