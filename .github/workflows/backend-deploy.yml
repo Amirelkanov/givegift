@@ -77,7 +77,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
       - name: Setup Docker
-        run: bash ./setup-docker.sh
+        run: bash ./.github/workflows/setup-docker.sh
       - name: Login to Yandex Cloud Container Registry
         id: login-cr
         uses: yc-actions/yc-cr-login@v3
