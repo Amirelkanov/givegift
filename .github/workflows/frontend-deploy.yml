@@ -5,7 +5,7 @@ on:
     workflows: ["Project analysis by SonarQube"]
     types:
       - completed
-      
+
 jobs:
   build:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
@@ -83,6 +83,8 @@ jobs:
     needs: [build, test]
     runs-on: ubuntu-latest
     steps:
+      - name: Setup Docker
+        run: bash ./setup-docker.sh
       - name: Login to Yandex Cloud Container Registry
         id: login-cr
         uses: yc-actions/yc-cr-login@v3
