@@ -15,6 +15,13 @@ metadata:
     argocd-image-updater.argoproj.io/backend.pull-secret: pullsecret:argocd/yandex-creds
 
     argocd-image-updater.argoproj.io/write-back-method: git:secret:argocd/git-creds
+    argocd-image-updater.argoproj.io/write-back-target: "helmvalues:values.yaml"
+
+    argocd-image-updater.argoproj.io/frontend.helm.image-name: frontend.image.repository
+    argocd-image-updater.argoproj.io/frontend.helm.image-tag: frontend.image.tag
+    argocd-image-updater.argoproj.io/backend.helm.image-name: backend.image.repository
+    argocd-image-updater.argoproj.io/backend.helm.image-tag: backend.image.tag
+
 spec:
   project: default
   source:
