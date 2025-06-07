@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    # if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -34,7 +34,7 @@ jobs:
         run: npm ci
 
   test:
-    #if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     needs: build
     runs-on: ubuntu-latest
     defaults:
@@ -70,7 +70,7 @@ jobs:
           path: givegift-backend/coverage
   
   push:
-    #if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     needs: [build, test]
     runs-on: ubuntu-latest
     steps:
